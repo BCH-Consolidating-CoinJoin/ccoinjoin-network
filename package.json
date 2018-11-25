@@ -4,7 +4,8 @@
   "description": "An npm library for connecting to the Consolidating CoinJoin peer-to-peer network.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha test/unit",
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
@@ -24,6 +25,7 @@
   },
   "homepage": "https://github.com/BCH-Consolidating-CoinJoin/ccoinjoin-network#readme",
   "devDependencies": {
+    "chai": "^4.2.0",
     "coveralls": "^3.0.2",
     "mocha": "^5.2.0",
     "nyc": "^13.1.0",
