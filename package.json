@@ -22,5 +22,15 @@
   "bugs": {
     "url": "https://github.com/BCH-Consolidating-CoinJoin/ccoinjoin-network/issues"
   },
-  "homepage": "https://github.com/BCH-Consolidating-CoinJoin/ccoinjoin-network#readme"
+  "homepage": "https://github.com/BCH-Consolidating-CoinJoin/ccoinjoin-network#readme",
+  "devDependencies": {
+    "coveralls": "^3.0.2",
+    "mocha": "^5.2.0",
+    "nyc": "^13.1.0",
+    "semantic-release": "^15.12.1"
+  },
+  "dependencies": {
+    "ipfs": "^0.33.1",
+    "orbit-db": "^0.19.9"
+  }
 }
