@@ -1,6 +1,12 @@
 /*
 */
 
-"use strict"
+"use strict";
 
-console.log(`Hello world!`)
+module.exports = {
+  helloWorld
+};
+
+function helloWorld() {
+  console.log(`Hello world!`);
+}
