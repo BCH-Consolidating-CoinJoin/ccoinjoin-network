@@ -1,0 +1,41 @@
+{
+  "name": "ccoinjoin-network",
+  "version": "1.0.0",
+  "description": "An npm library for connecting to the Consolidating CoinJoin peer-to-peer network.",
+  "main": "index.js",
+  "scripts": {
+    "test": "COINJOIN_ENV=test nyc --reporter=text mocha test/unit",
+    "start": "node index.js",
+    "coverage": "nyc report --reporter=text-lcov | coveralls",
+    "coverage:report": "COINJOIN_ENV=test nyc --reporter=html mocha --exit test/unit",
+    "semantic-release": "semantic-release"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BCH-Consolidating-CoinJoin/ccoinjoin-network.git"
+  },
+  "keywords": [
+    "bitcoin",
+    "bitbox",
+    "ipfs",
+    "orbit-db",
+    "tor"
+  ],
+  "author": "Chris Troutner <chris.troutner@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/BCH-Consolidating-CoinJoin/ccoinjoin-network/issues"
+  },
+  "homepage": "https://github.com/BCH-Consolidating-CoinJoin/ccoinjoin-network#readme",
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "coveralls": "^3.0.2",
+    "mocha": "^5.2.0",
+    "nyc": "^13.1.0",
+    "semantic-release": "^15.12.1"
+  },
+  "dependencies": {
+    "ipfs": "^0.33.1",
+    "orbit-db": "^0.19.9"
+  }
+}
