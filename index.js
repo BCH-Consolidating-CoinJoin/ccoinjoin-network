@@ -18,9 +18,13 @@ util.inspect.defaultOptions = {depth: 1};
 class CCNet {
   // Connect to the IPFS network and load the DB.
   constructor() {
+    // Combine the two lists of IPFS bootstrap nodes.
     this.bootstrap = ipfsData.ipfsBootstrap.concat(ccoinjoinData.ccoinjoinBootstrap)
+
     this.ipfs = {} // Will contain an instance of IPFS.
     this.db = {} // Will contain an instance of the OrbitDB.
+    this.ipfsIsReady = false // Flag to signal when IPFS is ready.
+    this.dbHasSynced = false // Flag to signal when the DB has synced at least once.
   }
 
   // Connect to the IPFS network
@@ -45,33 +49,50 @@ class CCNet {
     // Once IPFS is ready, initialize the DB.
     ipfs.on('ready', async () => {
       console.log('IPFS is ready.')
+      this.ipfsIsReady = true
 
-      console.log(`ipfs: ${util.inspect(ipfs)}`)
+      const access = {
+        // Give write access to everyone
+        write: ['*']
+      }
 
-      await this.openDB(ipfs)
+      // Create OrbitDB instance
+      const orbitdb = new OrbitDB(ipfs)
+
+      // Instantiate the ccoinjoin database.
+      const db = await orbitdb.eventlog('ccoinjoin', access)
+
+      // Load any saved state from disk.
+      await db.load()
+
+      // Save local instances of ipfs and the db.
+      this.db = db
+      this.ipfs = ipfs
+
+      // React to DB update events.
+      db.events.on('replicated', () => {
+        console.log(`replication event fired`)
+        this.dbHasSynced = true
+      })
     })
   }
 
-  // Called by the ipfs on.ready event. Opens the DB and loads locally saved data.
-  async openDB(ipfs) {
-    const access = {
-      // Give write access to everyone
-      write: ['*']
-    }
+  // Returns an array of the last 100 entries from the log DB.
+  // latest[0] should be the latest entry, with latest[99] being the oldest.
+  // Ordering is subject to network latency and CRDT algorithm.
+  async readDB() {
+    const latest = this.db.iterator({ limit: 100 }).collect()
+    return latest.reverse()
+  }
 
-    // Create OrbitDB instance
-    const orbitdb = new OrbitDB(ipfs)
+  // Writes a JSON object to the log DB.
+  // Returns false if the db has not yet synced.
+  async writeDB(data) {
+    if(!this.dbHasSynced) return false
 
-    // Instantiate the ccoinjoin database.
-    const db = await orbitdb.eventlog('ccoinjoin', access)
+    // Input validation code here.
 
-    // Load any saved state from disk.
-    await db.load()
-
-    // React to DB update events.
-    db.events.on('replicated', () => {
-      console.log(`replication event fired`)
-    })
+    await this.db.add(data)
   }
 
   //Update List - Update the list of IPFS bootstrap servers, and validate the list
