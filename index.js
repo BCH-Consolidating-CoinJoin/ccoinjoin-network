@@ -12,10 +12,16 @@ const util = require("util");
 util.inspect.defaultOptions = {depth: 1};
 
 class CCNet {
+  // Connect to the IPFS network and load the DB.
   constructor() {
     //console.log(`ipfsBootstrap: ${util.inspect(ipfsBootstrap)}`)
     this.bootstrap = ipfsData.ipfsBootstrap.concat(ccoinjoinData.ccoinjoinBootstrap)
   }
+
+  //Update List - Update the list of IPFS bootstrap servers, and validate the list
+  // of Consolidating CoinJoin servers.
+
+  // Broadcast server.
 }
 
 module.exports = CCNet;
