@@ -4,7 +4,7 @@
   "description": "An npm library for connecting to the Consolidating CoinJoin peer-to-peer network.",
   "main": "index.js",
   "scripts": {
-    "test": "COINJOIN_ENV=test nyc --reporter=text mocha test/unit",
+    "test": "COINJOIN_ENV=test nyc --reporter=text mocha --exit test/unit",
     "start": "node index.js",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "coverage:report": "COINJOIN_ENV=test nyc --reporter=html mocha --exit test/unit",
