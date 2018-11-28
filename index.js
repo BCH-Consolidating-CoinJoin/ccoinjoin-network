@@ -32,6 +32,7 @@ class CCNet {
   // Connect to the IPFS network.
   // Returns a promise that resolves to true when the IPFS network is connected
   // and the OrbitDB has been loaded.
+  // Testing new circuit relay experimental module.
   async connectToIPFS() {
     return new Promise((resolve, reject) => {
       try {
