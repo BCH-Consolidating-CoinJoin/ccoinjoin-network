@@ -40,7 +40,13 @@ class CCNet {
         const ipfsOptions = {
           start: true,
           EXPERIMENTAL: {
-            pubsub: true
+            pubsub: true,
+            relay: {
+              enabled: true, // enable circuit relay dialer and listener
+              hop: {
+                enabled: true // enable circuit relay HOP (make this node a relay)
+              }
+            }
           },
           config: {
             // Override default bootstrap list with save list of bootstrap peers.
