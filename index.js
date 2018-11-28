@@ -64,29 +64,8 @@ class CCNet {
           console.log("IPFS is ready.");
           this.ipfsIsReady = true;
 
-          const access = {
-            // Give write access to everyone
-            write: ["*"]
-          };
-
-          // Create OrbitDB instance
-          const orbitdb = new OrbitDB(ipfs);
-
-          // Instantiate the ccoinjoin database.
-          const db = await orbitdb.eventlog("ccoinjoin", access);
-
-          // Load any saved state from disk.
-          await db.load();
-
           // Save local instances of ipfs and the db.
-          this.db = db;
           this.ipfs = ipfs;
-
-          // React to DB update events.
-          db.events.on("replicated", () => {
-            console.log(`replication event fired`);
-            this.dbHasSynced = true;
-          });
 
           return resolve(true)
         });
@@ -95,6 +74,42 @@ class CCNet {
         return reject(err);
       }
     });
+  }
+
+  // Connects to an OrbitDB. Assumes IPFS has already established a connection.
+  async connectToOrbitDB(orbitAddr) {
+    // Create OrbitDB instance
+    const orbitdb = new OrbitDB(this.ipfs);
+    let db
+
+    if(!orbitAddr) {
+      const access = {
+        // Give write access to everyone
+        write: ["*"]
+      };
+
+      db = await orbitdb.eventlog("ccoinjoin", access);
+      console.log(`New ccoinjoin DB created. DB ID: ${db.id}`)
+    }
+
+    else {
+      console.log(`Connecting to OrbitDB ${orbitAddr}`)
+      db = await orbitdb.eventlog(orbitAddr);
+    }
+
+    // Load any saved state from disk.
+    await db.load();
+
+    // Save local instances of ipfs and the db.
+    this.db = db;
+
+    // React to DB update events.
+    db.events.on("replicated", () => {
+      console.log(`replication event fired`);
+      this.dbHasSynced = true;
+    });
+
+    return db
   }
 
   // Returns an array of the last 100 entries from the log DB.
