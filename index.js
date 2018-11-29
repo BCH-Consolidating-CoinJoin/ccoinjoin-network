@@ -9,8 +9,8 @@ const IPFS = require("ipfs");
 const OrbitDB = require("orbit-db");
 
 // Load locally saved data.
-const ipfsData = require("./data/ipfs-bootstrap.json");
-const ccoinjoinData = require("./data/ccoinjoin-bootstrap.json");
+const ccoinjoinBootstrap = require("./data/ccoinjoin-bootstrap.json")
+const knownServers = require("./data/known-servers.json")
 
 const util = require("util");
 util.inspect.defaultOptions = { depth: 1 };
@@ -18,10 +18,9 @@ util.inspect.defaultOptions = { depth: 1 };
 class CCNet {
   // Connect to the IPFS network and load the DB.
   constructor() {
-    // Combine the two lists of IPFS bootstrap nodes.
-    this.bootstrap = ipfsData.ipfsBootstrap.concat(
-      ccoinjoinData.ccoinjoinBootstrap
-    );
+    // Load the initial bootstrap peers
+    this.bootstrap = ccoinjoinBootstrap.ccoinjoinBootstrap
+
 
     this.ipfs = {}; // Will contain an instance of IPFS.
     this.db = {}; // Will contain an instance of the OrbitDB.
@@ -42,17 +41,14 @@ class CCNet {
           start: true,
           EXPERIMENTAL: {
             pubsub: true,
-            relay: {
-              enabled: true, // enable circuit relay dialer and listener
-              hop: {
-                enabled: true // enable circuit relay HOP (make this node a relay)
-              }
+          },
+          relay: {
+            enabled: true, // enable circuit relay dialer and listener
+            hop: {
+              enabled: true // enable circuit relay HOP (make this node a relay)
             }
           },
-          config: {
-            // Override default bootstrap list with save list of bootstrap peers.
-            Bootstrap: this.bootstrap
-          }
+          pubsub: true
         };
 
         const ipfs = new IPFS(ipfsOptions);
@@ -117,7 +113,8 @@ class CCNet {
   // Ordering is subject to network latency and CRDT algorithm.
   async readDB() {
     const latest = this.db.iterator({ limit: 100 }).collect();
-    return latest.reverse();
+    //return latest.reverse()
+    return latest
   }
 
   // Writes a JSON object to the log DB.
