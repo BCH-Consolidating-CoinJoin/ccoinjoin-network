@@ -120,7 +120,7 @@ class CCNet {
   // Writes a JSON object to the log DB.
   // Returns false if the db has not yet synced.
   async writeDB(data) {
-    if (!this.dbHasSynced) return false;
+    //if (!this.dbHasSynced) return false;
 
     // Input validation code here.
 
