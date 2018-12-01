@@ -124,7 +124,7 @@ class CCNet {
 
     // Input validation code here.
 
-    await this.db.add(data);
+    return await this.db.add(data);
   }
 
   //Update List - Update the list of IPFS bootstrap servers, and validate the list
