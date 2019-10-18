@@ -33,7 +33,7 @@
     "coveralls": "^3.0.2",
     "mocha": "^5.2.0",
     "nyc": "^13.1.0",
-    "semantic-release": "^15.12.1"
+    "semantic-release": "^15.13.27"
   },
   "dependencies": {
     "ipfs": "^0.33.1",
