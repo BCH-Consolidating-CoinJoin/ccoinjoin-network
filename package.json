@@ -36,7 +36,7 @@
     "semantic-release": "^15.12.1"
   },
   "dependencies": {
-    "ipfs": "^0.33.1",
+    "ipfs": "^0.43.0",
     "orbit-db": "^0.19.9"
   }
 }
